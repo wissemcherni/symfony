@@ -1,0 +1,114 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}liste des formation FormationController!{% endblock %}
+
+
+{% block body %}
+{% if formations is not null and formations|length > 0 %}
+<table> 
+<tr>
+ <th> 
+ Reference
+ </th>
+
+
+ <th> 
+ titre 
+ </th>
+
+ <th> 
+ description
+ </th>
+
+ <th> 
+ debut
+ </th>
+
+ <th> 
+ fin
+ </th>
+
+ <th> 
+ nb_participant 
+ </th>
+
+ <th> 
+actions 
+ </th>
+</tr>
+{% for formation in formations %}
+<tr>
+ <th> 
+ {{formation.ref}}
+ </th>
+
+ <th> 
+ {{formation.Titre|upper }}
+ </th>
+
+ <th> 
+{{ formation.Description}}
+ </th>
+
+ <th> 
+ {{formation.date_debut}}
+ </th>
+
+ <th> 
+ {{formation.date_fin}}
+ </th>
+
+ <th> 
+ {{formation.nb_participants}} 
+ </th>
+
+ <th> 
+ {% if formation.nb_participants >0  %}
+  **
+  {% else %}
+   <a href="{{path('app_formation_details',{'Titre':formation.Titre})}}"> participer </a>
+   {% endif %}
+
+ </th>
+</tr>
+{% endfor %}
+</table>  
+
+<div> 
+ <b> Nombre de formation : {{formations|length}}</b>
+ </div>
+<div> 
+ <b> les formations theorique : 
+  {% for formation in formations  %}
+  {% if formation.Description is same as "formation theorique" %}
+  {{formation.Titre}}
+  {% endif %}
+  {% endfor %} 
+  </b>
+ </div>
+
+ <div>
+ 
+        <b>La formation ayant le plus grand nombre de participants :
+            {% set maxVal = 0 %}
+            {% set total = 0 %}
+            {% for formation in formations %}
+                {% set total = (total + formation.nb_participants ) %}
+                {% set maxVal = max(formation.nb_participants, maxVal) %}
+            {% endfor %}
+            {% for formation in formations %}
+                {% if formation.nb_participants is same as maxVal %}
+                    {{ formation.Titre|upper }}
+                {% endif %}
+            {% endfor %}
+        </b>
+    </div>
+    <div>
+        <b>Le total des participants est {{ total }}</b>
+    </div> 
+ </b>
+ </div>
+
+ {% else %}  pas du formations 
+ {% endif %} 
+{% endblock %}
